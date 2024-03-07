@@ -1,124 +1,115 @@
-//import universal *.h
 #include "stdc.h"
 
 using namespace std;
 
 
-//Given an array nums of n integers, return an array of all the unique
-//quadruplets [nums[a], nums[b], nums[c], nums[d]] such that:
+//Given an input string s, reverse the order of the words.
+//
+// A word is defined as a sequence of non-space characters. The words in s will
+//be separated by at least one space.
+//
+// Return a string of the words in reverse order concatenated by a single space.
 //
 //
-// 0 <= a, b, c, d < n
-// a, b, c, and d are distinct.
-// nums[a] + nums[b] + nums[c] + nums[d] == target
-//
-//
-// You may return the answer in any order.
+// Note that s may contain leading or trailing spaces or multiple spaces
+//between two words. The returned string should only have a single space separating the
+//words. Do not include any extra spaces.
 //
 //
 // Example 1:
 //
 //
-//Input: nums = [1,0,-1,0,-2,2], target = 0
-//Output: [[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]
+//Input: s = "the sky is blue"
+//Output: "blue is sky the"
 //
 //
 // Example 2:
 //
 //
-//Input: nums = [2,2,2,2,2], target = 8
-//Output: [[2,2,2,2]]
+//Input: s = "  hello world  "
+//Output: "world hello"
+//Explanation: Your reversed string should not contain leading or trailing
+//spaces.
+//
+//
+// Example 3:
+//
+//
+//Input: s = "a good   example"
+//Output: "example good a"
+//Explanation: You need to reduce multiple spaces between two words to a single
+//space in the reversed string.
 //
 //
 //
 // Constraints:
 //
 //
-// 1 <= nums.length <= 200
-// -10⁹ <= nums[i] <= 10⁹
-// -10⁹ <= target <= 10⁹
+// 1 <= s.length <= 10⁴
+// s contains English letters (upper-case and lower-case), digits, and spaces '
+//'.
+// There is at least one word in s.
 //
 //
-// Related Topics Array Two Pointers Sorting 👍 10936 👎 1332
+//
+// Follow-up: If the string data type is mutable in your language, can you
+//solve it in-place with O(1) extra space?
+//
+// Related Topics Two Pointers String 👍 8001 👎 5059
 
 
-namespace solution18{
+namespace solution151{
     //leetcode submit region begin(Prohibit modification and deletion)
-    class Solution {
+    class Solution{
     public:
-        // 在实现该功能的时候，在这个测试样例下[1000000000,1000000000,1000000000,1000000000]出现了overflow的错误 | 即加法操作加的时候超出了其所能表示的最大范围
-        vector<vector<int>> fourSum(vector<int>& nums, int target)
+        void getNext(int* next, const string& s)
         {
-            vector< vector<int> > result = {};
-            sort(nums.begin(), nums.end());
-
-            // 先写两个for()循环进行去重
-            for(int i = 0; i < nums.size(); ++i)
+            next[0] = 0;
+            int i = 1;
+            int j = 0;
+            while(i < s.size())
             {
-                if (nums[i] > target && nums[i] >= 0)
-                    break; // 这里使用break，统一通过最后的return返回
+                j = next[i-1];  // 使用j对字符串的对称性进行判断
+//                if(s[j] == s[i]) next[i] = ++j;
+//                else
+//                {
+//                    while(j>0 && s[j] != s[i])
+//                        j = next[j-1];
+//                    if(s[i] == s[j]) next[i] = ++j;
+//                    else next[i] =0;
+//                }
+                while(j>0 && s[j] != s[i])
+                    j = next[j-1];
 
-                // 对a去重
-                if(i > 0 && nums[i] == nums[i-1])
-                    continue;
-
-                for(int j = i + 1; j < nums.size(); ++j)
-                {
-
-                    if (nums[i]+nums[j] > target && nums[i]+nums[j] >= 0)
-                        break; // 这里使用break，统一通过最后的return返回
-
-                    // 对b进行去重 | 总是感觉b的去重有点类似于left的去重
-                    if( j-i > 1 && nums[j] == nums[j-1])
-                        continue;
-
-                    int left = j + 1;
-                    int right = nums.size()-1;
-                    while(right > left)
-                    {
-                        long long temp = 0;
-                        temp += nums[i];
-                        temp += nums[j];
-                        temp += nums[left];
-                        temp += nums[right];
-
-                        if(temp > target)
-                            right--;
-                        else if(temp < target)
-                            left++;
-                        else
-                        {
-                            // 放入数据结果
-                            result.push_back( {nums[i], nums[j], nums[left], nums[right]} );
-                            // 去left与right数据进行去重
-                            while( right > left && nums[left] == nums[left+1]) left++;
-                            while( right > left && nums[right] == nums[right-1] ) right--;
-                            // 更新序号
-                            right--;
-                            left++;
-                        }
-                    }
-                }
+                if(s[i] == s[j]) ++j;
+                next[i] = j;
+                ++i;
             }
-            return result;
+
+            for(int i = 0; i<s.size(); ++i)
+                cout<<next[i];
+
         }
+
+
+//        int strStr(string haystack, string needle)
+//        {
+//            // 根据needle字符串生成一个next数组
+//            int next[needle.size()];
+//
+//        }
     };
 //leetcode submit region end(Prohibit modification and deletion)
 
 }
 
-using namespace solution18;
+using namespace solution151;
 int main() {
     Solution solution = Solution();
-    vector< vector<int> > a = {};
-    vector<int> b = {0,0,0,1000000000,1000000000,1000000000,1000000000};
-    a = solution.fourSum(b,1000000000);
 
-    for(auto& i : a)
-    {
-        for(auto j : i)
-            cout<<j<<' ';
-        cout<<endl;
-    }
+    int next[5];
+    string s = "aaaac";
+    solution.getNext(next,s);
+
     return 0;
 }
