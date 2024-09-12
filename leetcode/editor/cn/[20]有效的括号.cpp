@@ -20,7 +20,7 @@ public:
         if(s.size()%2 != 0)
             return false;
         stack<int> left;
-        //进行字符串的遍历 -> 如果是左括号就入栈 右括号就出栈
+        // 进行字符串的遍历 -> 如果是左括号就入栈 右括号就出栈
         for(int i = 0; i<s.size(); ++i){
             if(s[i] == '{' || s[i] == '[' || s[i] == '(' ) left.push(s[i]);
             else
@@ -33,11 +33,8 @@ public:
                     left.pop();
                 else
                     return false;
-
             }
-
         }
-
         // 已经结束了，但是左括号还是多
         if(left.size() != 0) return false;
         return true;
