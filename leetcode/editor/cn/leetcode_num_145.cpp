@@ -26,7 +26,22 @@ void traversal(TreeNode* root , vector<int>& res)
 
 void stack_traversal(TreeNode* root , vector<int>& res)
 {
-
+    if(root == nullptr) return;
+    stack<TreeNode*> s;
+    s.push(root);
+    /* 后序遍历 —— 按照左右中的顺序处理 | 有一种比较tricky的方法, 不需要解决访问顺序与读取顺序不一致的问题
+     *     只需要将读取方式更换中右左的处理方法, 最后将result数组反转, 就可以解决如下问题，并且整理的流程还与前序遍历类似
+     * */
+    while(!s.empty())
+    {
+        TreeNode* temp = s.top();
+        s.pop();
+        res.push_back(temp->val);
+        // 注意stack中的顺序按照 "中右左"的方法, 需要确定入栈顺序 先入栈后处理!!!
+        if(temp->left) s.push(temp->left);
+        if(temp->right) s.push(temp->right);
+    }
+    reverse(res.begin(), res.end());
 }
 
 class Solution {
