@@ -3,66 +3,6 @@
 using namespace std;
 
 
-//给你二叉树的根节点 root ，返回它节点值的 前序 遍历。 
-//
-// 
-//
-// 示例 1： 
-//
-// 
-// 输入：root = [1,null,2,3] 
-// 
-//
-// 输出：[1,2,3] 
-//
-// 解释： 
-//
-// 
-//
-// 示例 2： 
-//
-// 
-// 输入：root = [1,2,3,4,5,null,8,null,null,6,7,9] 
-// 
-//
-// 输出：[1,2,4,5,6,7,3,8,9] 
-//
-// 解释： 
-//
-// 
-//
-// 示例 3： 
-//
-// 
-// 输入：root = [] 
-// 
-//
-// 输出：[] 
-//
-// 示例 4： 
-//
-// 
-// 输入：root = [1] 
-// 
-//
-// 输出：[1] 
-//
-// 
-//
-// 提示： 
-//
-// 
-// 树中节点数目在范围 [0, 100] 内 
-// -100 <= Node.val <= 100 
-// 
-//
-// 
-//
-// 进阶：递归算法很简单，你可以通过迭代算法完成吗？ 
-//
-// Related Topics 栈 树 深度优先搜索 二叉树 👍 1275 👎 0
-
-
 namespace solution144{
     //leetcode submit region begin(Prohibit modification and deletion)
 /**
@@ -86,14 +26,41 @@ void traversal(TreeNode* root, vector<int>& res)
     traversal(root->right, res);
 }
 
+// 在这里使用stack实现迭代遍历，仍然是一种深度优先的遍历方式，不过使用stack可以很好的将之前的数据保存下来(因为TreeNode中不能指向其父结点)
+void stack_traversal(TreeNode* root, vector<int>& res)
+{
+    if(root == nullptr) return;
+    stack<TreeNode*> st;
+    st.push(root);
+    while(!st.empty())
+    {
+        TreeNode*  temp = st.top();
+        res.push_back(temp->val);
+        st.pop();
+        // 两者可以同时执行
+        if(temp->right != nullptr)
+            st.push(temp->right);
+        if(temp->left != nullptr)
+            st.push(temp->left);
+        continue;
+    }
+}
+
+
 class Solution {
 public:
-    /*** 递归方法 —— 确定形参以及终止条件  ***/
     vector<int> preorderTraversal(TreeNode* root)
     {
+        /*** 递归方法 —— 确定形参以及终止条件  ***/
+//        vector<int> res={};
+//        traversal(root, res);
+//        return res;
+
+        /*** 迭代方法 ***/
         vector<int> res={};
-        traversal(root, res);
+        stack_traversal(root, res);
         return res;
+
     }
 };
 //leetcode submit region end(Prohibit modification and deletion)

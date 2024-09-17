@@ -24,15 +24,24 @@ void traversal(TreeNode* root , vector<int>& res)
     res.push_back(root->val);
 }
 
+void stack_traversal(TreeNode* root , vector<int>& res)
+{
+
+}
 
 class Solution {
 public:
     // 后序遍历，按照左右中的顺序遍历
     vector<int> postorderTraversal(TreeNode* root)
     {
-        if(root == nullptr) return {};
+//        if(root == nullptr) return {};
+//        vector<int> res = {};
+//        traversal(root, res);
+//        return res;
+
+        /*** 迭代遍历 ***/
         vector<int> res = {};
-        traversal(root, res);
+        stack_traversal(root, res);
         return res;
     }
 };
