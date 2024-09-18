@@ -51,6 +51,12 @@ void stack_traversal(TreeNode* root , vector<int>& res )
     }
 }
 
+/*
+ * 后续在代码随想录上针对遍历实现前中后三种遍历方法代码不能复用的情况又做了更改
+ * 1. 解决了访问的结点不一定是需要处理结点的情况
+ * 2. 在访问中间结点的时候，加入了NULL. 针对stack中的元素是否为NULL分策略进行读取(就是不知道这种策略是不是在其他情况也能使用)
+ * */
+
 
 class Solution {
 public:
