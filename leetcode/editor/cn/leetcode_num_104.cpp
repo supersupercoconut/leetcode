@@ -55,6 +55,7 @@ public:
 //        return res;
 
         /*** 递归遍历实现 ***/
+        // 还是对递归的使用不清晰, 在这里使用起来总是有一定的误区，对于递归函数的返回值不是很清晰
         if(root == nullptr) return 0;
         int res = traversal(root);
         return res;
