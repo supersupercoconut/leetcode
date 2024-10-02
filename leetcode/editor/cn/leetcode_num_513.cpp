@@ -17,13 +17,10 @@ namespace solution513{
  * };
  */
 
-// 层次遍历的方法最简单不需要解释, 对于递归方法实现, 因为不需要处理中间节点的数据，所以同一层中, 只要先处理到的节点就是最左侧的节点
-/*
- * 1. 函数返回值为函数的层数
- * 2. 函数迭中的number为当前函数最左侧节点val值
- * */
-
-// 题目的思路一开始想的就没有问题, 只是不知道深度值与数值如何一起返回(没有考虑unorder_map<>的方式, 再使用pair什么的) | 现在对应的整体逻辑有些问题, 谁做全局变量谁是函数返回值有些问题
+/***
+ * 1. 层次遍历最简单,尝试使用递归方法进行处理(递归第一次到深度最大的节点即可以认为是目标节点)
+ * 2. 题目的思路一开始想的就没有问题, 只是不知道深度值与数值如何一起返回(没有考虑unorder_map<>的方式, 再使用pair什么的)
+ * ***/
 
 //int traversal(TreeNode* treeNode, int& number)
 //{
@@ -44,10 +41,49 @@ namespace solution513{
 
 
 // TODO 发现一个问题 如果这两个 int max_depth = 0x80000000; int result = 0;不写在class类中的话,最终输出的结果一直不正常(很奇怪!!!!)
-class Solution {
-public:
     int max_depth = 0x80000000; // 0x70000000是32位int对应的最大的正数, 其+1对应的是int所能表示最大负数的正数表示, 其取反+1之后对应的就是负数的表示
     int result = 0;
+
+class Solution {
+public:
+
+    struct tree_res
+    {
+        int depth = 0x80000000;
+        int res;
+    };
+
+    tree_res struct_traversal(TreeNode* treeNode)
+    {
+        if(treeNode->left == nullptr && treeNode->right == nullptr)
+        {
+            tree_res res_t;
+            res_t.depth = 1;
+            res_t.res = treeNode->val;
+            return res_t;
+        }
+
+        tree_res left_res;
+        tree_res right_res;
+
+        if(treeNode->left)
+            left_res = struct_traversal(treeNode->left);
+        if(treeNode->right)
+            right_res = struct_traversal(treeNode->right);
+
+        /*** 复杂的条件判断 (struct中的depth需要默认成最小值) ***/
+        if(left_res.depth >= right_res.depth)
+        {
+            left_res.depth += 1;
+            return left_res;
+        }
+        else
+        {
+            right_res.depth += 1;
+            return right_res;
+        }
+    }
+
     void traversal(TreeNode* treeNode, int depth)
     {
         if(treeNode->left == nullptr && treeNode->right == nullptr)
@@ -58,7 +94,6 @@ public:
                 max_depth = depth;
             }
         }
-
 
         if(treeNode->left)
         {
@@ -73,14 +108,15 @@ public:
             traversal(treeNode->right, depth);
             depth--;
         }
-
     }
 
     int findBottomLeftValue(TreeNode* root)
     {
         if(root == nullptr) return 0;
-        traversal(root,1);
-        return result;
+//        traversal(root,1);
+//        return result;
+        auto temp = struct_traversal(root);
+        return temp.res;
 
     }
 };
