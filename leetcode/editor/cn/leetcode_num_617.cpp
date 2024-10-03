@@ -19,12 +19,17 @@ namespace solution617{
 
 TreeNode* merge(TreeNode* ptr_1, TreeNode* ptr_2)
 {
-    if(ptr_1 == nullptr && ptr_2 == nullptr)
-        return nullptr;
-    else if(ptr_1 == nullptr && ptr_2 != nullptr)
-        return ptr_2;
-    else if(ptr_1 != nullptr && ptr_2 == nullptr)
-        return ptr_1;
+    // 之前的判断逻辑比较复杂 —— 实际上是可以简化的
+//    if(ptr_1 == nullptr && ptr_2 == nullptr)
+//        return nullptr;
+//    else if(ptr_1 == nullptr && ptr_2 != nullptr)
+//        return ptr_2;
+//    else if(ptr_1 != nullptr && ptr_2 == nullptr)
+//        return ptr_1;
+
+    // 简化之后更简便
+    if(ptr_1 == nullptr) return ptr_2;
+    if(ptr_2 == nullptr) return ptr_1;
     else
     {
         int new_val = ptr_1->val + ptr_2->val;

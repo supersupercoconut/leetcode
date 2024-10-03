@@ -25,7 +25,7 @@ bool traversal(TreeNode* treeNode, vector<int>& path, int targetSum)
     // 找到叶子节点
     if(treeNode->left == nullptr && treeNode->right == nullptr)
     {
-        int res;
+        int res = 0;
         for(auto i : path)
             res += i;
         if(res == targetSum)
@@ -50,8 +50,6 @@ bool traversal(TreeNode* treeNode, vector<int>& path, int targetSum)
 
     return false;
 }
-
-
 
 class Solution {
 public:
