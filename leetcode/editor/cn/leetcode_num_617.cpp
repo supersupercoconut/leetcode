@@ -33,6 +33,7 @@ TreeNode* merge(TreeNode* ptr_1, TreeNode* ptr_2)
     else
     {
         int new_val = ptr_1->val + ptr_2->val;
+        // TODO 这里可以不新建二叉树, 直接使用其中一个树进行修改
         TreeNode* new_node = new TreeNode(new_val);
         // 给定左右子树
         TreeNode* left = merge(ptr_1->left, ptr_2->left);
