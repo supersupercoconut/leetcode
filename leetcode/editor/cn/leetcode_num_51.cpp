@@ -23,7 +23,6 @@ public:
         if(path.empty()) return true;
         int now_size = path.size();                 // 得到当前行对应的位置
         vector<int> now_level = {};                 // 记录当前行不应该出现什么元素
-        now_level.resize(path[0].size());
         now_level.assign(path[0].size(),0);
 
         // 分析当前行不应该出现Q的位置
