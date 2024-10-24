@@ -16,7 +16,7 @@ public:
         if(intervals.size() <= 1) return intervals;
         sort(intervals.begin(), intervals.end(), compare);
 
-        // note 能想到是使用list的方法固然是一种好的方法，但是这里直接再定义一个result数组就能直接分析虫胶
+        // note 能想到是使用list的方法固然是一种好的方法，但是这里直接再定义一个result数组就能直接分析提交
 //        list<vector<int>> my_list = {};
 //        for(int i = 0; i < intervals.size(); ++i)
 //            my_list.push_back(intervals[i]);
