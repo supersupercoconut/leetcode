@@ -6,6 +6,7 @@ namespace solution1049{
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 public:
+    // note 转换成为一半背包容量拿去问题很方便
     // 最后剩余的部分要求最小，说明其无论是什么样的选择方式，只去需寻找最后最小的部分
     int lastStoneWeightII(vector<int>& stones)
     {

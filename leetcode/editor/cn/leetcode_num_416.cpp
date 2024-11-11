@@ -18,7 +18,7 @@ public:
         int target = sum / 2;
         cout << target << endl;
         vector<int> dp(target+1, 0);
-        // i 代表当前可以考虑的元素值，j代表当前最大容量
+        // i 代表当前可以考虑的元素值，j代表当前最大容量(当前背包中的元素对应的重量和不会超过当前设定的上限值)
         for(int i = 0; i < nums.size(); ++i)
         {
             for(int j = target; j >= nums[i] ; --j)
