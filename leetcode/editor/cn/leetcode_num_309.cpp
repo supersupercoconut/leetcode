@@ -4,7 +4,7 @@ namespace solution309{
     //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 public:
-    // note 处理相关冷冻期(比较复杂, 尤其是定义的dp数组比较复杂)
+    // note 处理相关冷冻期(比较复杂, 尤其是定义的dp数组比较复杂) | 这里也没有限制买卖次数,同样属于无限次的买卖问题
     int maxProfit(vector<int>& prices)
     {
         /***
@@ -29,12 +29,12 @@ public:
             dp[i][3] = dp[i-1][2];
         }
 
-        for(auto i : dp)
-        {
-            for(auto j : i)
-                cout << j << " ";
-            cout << endl;
-        }
+//        for(auto i : dp)
+//        {
+//            for(auto j : i)
+//                cout << j << " ";
+//            cout << endl;
+//        }
         // 2 3 4都属于未持有股票的状态，所以都可能是最大值
         return max(dp[prices.size()-1][3] ,max(dp[prices.size()-1][1], dp[prices.size()-1][2]));
 
