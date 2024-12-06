@@ -1,15 +1,14 @@
 /*** 图论(主要整理代码随想录中的图论章节问题, 问题基本都是在卡码网上) ***/
 
-/* 卡码网101 (孤岛的最大面积) 广度优先搜索 */
-#include<iostream>
-#include<vector>
-#include<queue>
+/* 卡码网102 (沉没孤岛) 深度优先搜索(重新修正了之前的处理模式，将深度优先的逻辑进行修正) */
+#include <iostream>
+#include <vector>
+#include <deque>
 using namespace std;
 
 int flag = 0;
-int res = 0;
-int temp_res = 0;
-deque<pair<int,int>> que = {};
+// 保留一定结果，方便后续的处理
+deque<pair<int,int>> reindex = {};
 // 定义方向
 int dir[4][2] = {
         {1,0},
@@ -19,51 +18,38 @@ int dir[4][2] = {
 };
 
 
-void bfs(vector<vector<int>>& graph, vector<vector<int>>& visited, int x, int y)
+// 指定出发点(x,y) 终点(end_x, end_y) 以及当前地图graph, 访问地图visited
+void dfs(vector<vector<int>>& graph, vector<vector<int>>& visited, int x, int y)
 {
-    visited[x][y] = 1;
-    if(graph[x][y] == 0)
-        return;
+    if(visited[x][y] == 1) return;
+    else
+        visited[x][y] = 1;
 
-    // 当前开始搜索的位置为graph中的1位置
-    que.push_back(pair<int,int>(x,y));
-    if(flag == 1)
-        temp_res += 1;
-    while(!que.empty())
+    int next_x = 0;
+    int next_y = 0;
+    if(graph[x][y] != 0)
     {
-        auto node = que.front();
-        que.pop_front();
+        // 处理当前节点，如果当前节点的位置在边缘区域直接清空该部分
+        if(x <= 1 || y <= 1 || x == graph.size() - 1 || y == graph[0].size() - 1)
+        {
+            flag = 0;
+            // 清除当前所有区域的信息
+            while(!reindex.empty())
+                reindex.pop_front();
+        }
 
-        int next_x = 0;
-        int next_y = 0;
+        if(flag == 1)
+            reindex.emplace_back(x,y);
+
         for(auto temp : dir)
         {
-            next_x = node.first + temp[0];
-            next_y = node.second + temp[1];
-            if(next_x >= 0 && next_x <= graph.size() - 1 && next_y >= 0 && next_y <= graph[0].size() - 1)
-            {
-                if(visited[next_x][next_y] == 0)
-                {
-                    visited[next_x][next_y] = 1;
-                    if(graph[next_x][next_y] == 1)
-                    {
-                        // 判断是否在边缘
-                        if(next_x <= 1 || next_y <= 1 || next_x == graph.size() -1 || next_y == graph[0].size() - 1)
-                        {
-                            flag = 0;
-                            temp_res = 0;
-                        }
-                        if(flag == 1)
-                            temp_res += 1;
-                        que.push_back(pair<int,int>(next_x,next_y));
-                    }
-                }
-            }
+            next_x = x + temp[0];
+            next_y = y + temp[1];
+            if(next_x >= 0 && next_x <= graph.size()-1 && next_y >= 0 && next_y <= graph[0].size()-1)
+                dfs(graph, visited, next_x, next_y);
         }
+        // 一次回调函数对应的的reindex查找结束之后不能直接操作graph数据, 需要当前这次操作回到出发位置才能处理
     }
-    // 如果当前的队列为空, 即对应着一块岛屿面积就查找完毕了
-//    cout << temp_res << endl;
-    res += temp_res;
 }
 
 
@@ -79,29 +65,144 @@ int main()
             cin >> graph[i][j];
     }
 
-
+    // 深度优先搜索
     for(int i = 1; i <= n; ++i)
     {
         for(int j = 1; j <= m; ++j)
         {
             if(visited[i][j] == 0)
             {
-                // graph为0的时候,需要进入给visited赋值1
-                if( i <= 1 || i == graph.size()-1 || j <= 1 || j == graph[0].size() - 1)
+                if(i <= 1 || j <= 1 || i == graph.size()-1 || j == graph[0].size() - 1)
                     flag = 0;
                 else
                     flag = 1;
-                bfs(graph, visited, i, j);
-                temp_res = 0;
 
+                if(graph[i][j] == 1)
+                {
+                    dfs(graph, visited, i, j);
+                    while(!reindex.empty())
+                    {
+                        auto temp = reindex.front();
+                        reindex.pop_front();
+                        graph[temp.first][temp.second] = 0;
+                    }
+                }
+                else
+                    visited[i][j] = 1;
             }
         }
     }
-    cout << res;
+
+    for(int i = 1; i<=graph.size()-1; ++i)
+    {
+        for(int j = 1; j <= graph[0].size() - 2; ++j)
+            cout << graph[i][j] << ' ';
+        cout << graph[i][graph[0].size()-1] << endl;
+    }
     return 0;
 }
 
 
+/* 卡码网101 (孤岛的最大面积) 广度优先搜索 */
+//#include<iostream>
+//#include<vector>
+//#include<queue>
+//using namespace std;
+//
+//int flag = 0;
+//int res = 0;
+//int temp_res = 0;
+//deque<pair<int,int>> que = {};
+//// 定义方向
+//int dir[4][2] = {
+//        {1,0},
+//        {0,1},
+//        {-1,0},
+//        {0,-1}
+//};
+//
+//
+//void bfs(vector<vector<int>>& graph, vector<vector<int>>& visited, int x, int y)
+//{
+//    visited[x][y] = 1;
+//    if(graph[x][y] == 0)
+//        return;
+//
+//    // 当前开始搜索的位置为graph中的1位置
+//    que.push_back(pair<int,int>(x,y));
+//    if(flag == 1)
+//        temp_res += 1;
+//    while(!que.empty())
+//    {
+//        auto node = que.front();
+//        que.pop_front();
+//
+//        int next_x = 0;
+//        int next_y = 0;
+//        for(auto temp : dir)
+//        {
+//            next_x = node.first + temp[0];
+//            next_y = node.second + temp[1];
+//            if(next_x >= 0 && next_x <= graph.size() - 1 && next_y >= 0 && next_y <= graph[0].size() - 1)
+//            {
+//                if(visited[next_x][next_y] == 0)
+//                {
+//                    visited[next_x][next_y] = 1;
+//                    if(graph[next_x][next_y] == 1)
+//                    {
+//                        // 判断是否在边缘
+//                        if(next_x <= 1 || next_y <= 1 || next_x == graph.size() -1 || next_y == graph[0].size() - 1)
+//                        {
+//                            flag = 0;
+//                            temp_res = 0;
+//                        }
+//                        if(flag == 1)
+//                            temp_res += 1;
+//                        que.push_back(pair<int,int>(next_x,next_y));
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    // 如果当前的队列为空, 即对应着一块岛屿面积就查找完毕了
+////    cout << temp_res << endl;
+//    res += temp_res;
+//}
+//
+//
+//int main()
+//{
+//    int n = 0, m = 0;
+//    cin >> n >> m;
+//    vector<vector<int>> graph(n + 1, vector<int>(m + 1, 0));
+//    vector<vector<int>> visited(n + 1, vector<int>(m + 1, 0));
+//    for(int i = 1; i <= n; ++i)
+//    {
+//        for(int j = 1; j <= m; ++j)
+//            cin >> graph[i][j];
+//    }
+//
+//
+//    for(int i = 1; i <= n; ++i)
+//    {
+//        for(int j = 1; j <= m; ++j)
+//        {
+//            if(visited[i][j] == 0)
+//            {
+//                // graph为0的时候,需要进入给visited赋值1
+//                if( i <= 1 || i == graph.size()-1 || j <= 1 || j == graph[0].size() - 1)
+//                    flag = 0;
+//                else
+//                    flag = 1;
+//                bfs(graph, visited, i, j);
+//                temp_res = 0;
+//
+//            }
+//        }
+//    }
+//    cout << res;
+//    return 0;
+//}
 
 
 /* 卡码网101 (孤岛的最大面积) 深度优先搜索 */
