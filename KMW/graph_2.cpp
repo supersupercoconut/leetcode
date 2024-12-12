@@ -2,14 +2,12 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 #include <deque>
 using namespace std;
 
 // note 该问题本质上是从字符串序列构建成为一个图结构, 剩余部分的操作就是分析最短路径
-
 unordered_map<string, vector<string>> adj = {};
-
-// note 对应的遍历要分析当前出去该元素之外的所有怨怒是
 void construct_adj(unordered_map<string, vector<string>>& _adj, vector<string>& strList)
 {
     for(int i = 0; i < strList.size() - 1; ++i)
@@ -33,66 +31,98 @@ void construct_adj(unordered_map<string, vector<string>>& _adj, vector<string>& 
         }
         _adj[strList[i]] = string_list;
     }
+    _adj[strList[strList.size()-1]] = {};
 }
 
 
-int main()
-{
+int main() {
     // 这里对应的cin操作相当于是会被空格或者回车间隔开进行处理
     int n = 0;
     cin >> n;
 
-    vector<string> strList(n+2);
-    cin >> strList[0] >> strList[n+1];
+    vector<string> strList(n + 2);
+    cin >> strList[0] >> strList[n + 1];
 
-    for(int i = 0; i < n; ++i)
-        cin >> strList[i+1];
+    for (int i = 0; i < n; ++i)
+        cin >> strList[i + 1];
 
 
-    construct_adj(adj,strList);
-    // 邻接表广搜
-    int res = 1;
+    construct_adj(adj, strList);
+    if (strList[0] == strList[n + 1]) return 1;
+    // 邻接表广搜 返回是的使用节点数 开始与结束不一致就默认为2
+    int res = 2;
     // 记录每一层因该放入多少元素
     int count = 0;
+    unordered_set<string> visited = {};
     // 生成队列保留元素
     deque<string> que;
-    for(auto i  : adj[strList[0]])
-    {
-        if(i == strList[n+1]) cout << res + 1;
+    for (auto i: adj[strList[0]]) {
+        if (i == strList[n + 1]) cout << res;
         que.emplace_back(i);
-        count ++;
+        count++;
     }
 
-    while(!que.empty())
+
+    // note 这里导致最终内存超出限制的原因很可能是由于在bfs的时候出现了类似回环的情况 | 既然是判断最短路径就不应该类似的情况发生
+    while (!que.empty())
     {
         while(count >= 1)
         {
             auto node = que.front();
             que.pop_front();
-            if(node == strList[n+1])
-            {
-                cout << res + 1;
-                return 0;
-            }
-
-            res += 1;
+            visited.insert(node);
+            res++;
             for(int i = 0; i < adj[node].size(); ++i)
             {
-                if(adj[node][i] == strList[n+1])
+                // 没找到才能放进来
+                if(visited.find(adj[node][i]) == visited.end())
                 {
-                    cout << res + 1;
-                    return 0;
+                    if(adj[node][i] == strList[n+1])
+                    {
+                        cout << res;
+                        return 0;
+                    }
+                    que.emplace_back(adj[node][i]);
                 }
-                que.emplace_back(adj[node][i]);
             }
-            res--;
-            --count;
-
-            cout << "que: " << que.size();
+            count--;
+            res--; // 这一层元素还没遍历完毕,所以这里还需要退回去 | 如果遍历完了，那么+1进入下一层
         }
         count = que.size();
         res++;
     }
     cout << res;
+    return 0;
+//    while(!que.empty())
+//    {
+//        while(count >= 1)
+//        {
+//            auto node = que.front();
+//            que.pop_front();
+//            if(node == strList[n+1])
+//            {
+//                cout << res + 1;
+//                return 0;
+//            }
+//
+////            res += 1;
+//            for(int i = 0; i < adj[node].size(); ++i)
+//            {
+////                if(adj[node][i] == strList[n+1])
+////                {
+////                    cout << res + 1;
+////                    return 0;
+////                }
+//                que.emplace_back(adj[node][i]);
+//            }
+////            res--;
+//            --count;
+//        }
+//        count = que.size();
+//        res++;
+//    }
+//
+//    cout << res;
+//    return 0;
     return 0;
 }
