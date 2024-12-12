@@ -1,106 +1,326 @@
 /*** 图论(主要整理代码随想录中的图论章节问题, 问题基本都是在卡码网上) ***/
 
+
+/* 卡码网104 建造最大岛屿 */
+// note 这里的整理过程主要有两步 (1)整理当前所有岛屿以及其对应的编号 (2)重新遍历0元素出来的位置然后寻找对应的区域 但是需要直到每一个(x,y)位置对应的岛屿编号 | 一开始的思路是保留原始的输入数据，所以需要重新新建一个m*n的二维结构来对应数据
+//#include <iostream>
+//#include <vector>
+//#include <unordered_map>
+//using namespace std;
+//
+//// 对应岛屿编号 | 序号从1开始,将其与其余部分分开
+//int grid_index = 1;
+//// 对应岛屿面积
+//int grid_res = 0;
+////int temp = 0;
+//int dir[4][2] = {
+//        {1,0},
+//        {0,1},
+//        {-1,0},
+//        {0,-1}
+//};
+//
+//void dfs(vector<vector<int>>& graph, vector<vector<int>>& visited, vector<vector<int>>& index, int x, int y)
+//{
+//    if(visited[x][y] == 1)
+//        return;
+//    visited[x][y] = 1;
+//    int next_x = 0;
+//    int next_y = 0;
+//
+//    if(graph[x][y] == 1)
+//    {
+//        index[x][y] = grid_index;
+//        grid_res +=1;
+//        for(auto temp : dir)
+//        {
+//            next_x = x + temp[0];
+//            next_y = y + temp[1];
+//            // 合理范围判断下一步元素
+//            if(next_x >= 0 && next_y >= 0 && next_x <= graph.size()-1 && next_y <= graph[0].size()-1)
+//            {
+//                dfs(graph, visited, index, next_x, next_y);
+//            }
+//        }
+//    }
+//}
+//
+//// 调用这个函数就默认了其会进行0到1的转换，但是实际上是存在不进行转化也能取到最大的情况
+//int computeMaxRes(vector<vector<int>>& graph, vector<vector<int>>& index,  unordered_map<int, int>& grid_map)
+//{
+//    int res = 0;
+//    // 定义used数组(处理是否出现相同元素还可以使用unorder_set()操作，清除的时候可以直接clear)
+//    vector<int> used(grid_map.size(), 0);
+//    for(int i = 0; i < graph.size(); ++i)
+//    {
+//        for(int j = 0; j < graph[0].size(); ++j)
+//        {
+//            if(graph[i][j] == 0)
+//            {
+//                int next_x = 0;
+//                int next_y = 0;
+//                int temp_res = 0;
+//                // 直接只去寻找周围元素, 但是需要注意当前元素周围是同一个index序号的岛屿，这里容易出现反复加的情况
+//                for(auto temp : dir)
+//                {
+//                    next_x += i + temp[0];
+//                    next_y += j + temp[1];
+//                    if(next_x >= 0 && next_y >= 0 && next_x <= graph.size()-1 && next_y <= graph[0].size() - 1)
+//                    {
+//                        if(grid_map.find(index[next_x][next_y]) != grid_map.end())
+//                        {
+//                            if(used[index[next_x][next_y]] == 0)
+//                            {
+//                                temp_res += grid_map[index[next_x][next_y]];
+//                                used[index[next_x][next_y]] = 1;
+//                            }
+//                        }
+//                    }
+//                    // 注意这里的元素需要清零
+//                    next_x = 0;
+//                    next_y = 0;
+//                }
+//                res = res > temp_res ? res : temp_res;
+//                // 使用数据清零
+//                vector<int> tmp_vec(grid_map.size(), 0);
+//                used.swap(tmp_vec);
+//            }
+//        }
+//    }
+//    return res;
+//}
+//
+//
+//int main()
+//{
+//    int n = 0, m = 0;
+//    cin >> n >> m;
+//
+//    vector<vector<int>> graph(n, vector<int>(m, 0));
+//    vector<vector<int>> visited(n, vector<int>(m,0));
+//    vector<vector<int>> index(n, vector<int>(m,0));
+//    unordered_map<int, int> grid;
+//
+//    for(int i = 0; i < n; ++i)
+//    {
+//        for(int j = 0; j < m; ++j)
+//            cin >> graph[i][j];
+//    }
+//
+//    int max_res = 0;
+//    for(int i = 0; i < n; ++i)
+//    {
+//        for(int j = 0; j < m; ++j)
+//        {
+//            if(graph[i][j] == 1 && visited[i][j] == 0)
+//            {
+//                dfs(graph, visited, index, i, j);
+//                grid.insert(pair<int, int>( grid_index ,grid_res));
+//                max_res = max_res > grid_res ? max_res : grid_res ;
+//                grid_index += 1;
+//                grid_res = 0;
+//            }
+//        }
+//    }
+//    // 变换之后, 自己那个位置上对应的元素也应该+1 | 如果不进行变换, 那么就直接使用对之前整理出来的max_res即可
+//    cout << max(max_res, computeMaxRes(graph, index, grid) + 1);
+////    for(auto i : grid)
+////    {
+////        cout << i.first << " " << i.second << endl;
+////    }
+////
+////    for(auto i : index)
+////    {
+////        for(auto j : i)
+////        {
+////            cout << j << ' ';
+////        }
+////        cout << endl;
+////    }
+//
+//    return 0;
+//}
+
+
+
+
+
+
+/* 卡码网103 水流问题(双边界开始遍历，从两个边界上能选择出来的visited数组进行融合) */
+//#include <iostream>
+//#include <vector>
+//using namespace std;
+//int dir[4][2] = {
+//        {1,0},
+//        {0,1},
+//        {-1,0},
+//        {0,-1}
+//};
+//
+//void dfs(vector<vector<int>>& graph, vector<vector<int>>& visited, int x, int y)
+//{
+//    if(visited[x][y] == 1)
+//        return;
+//    visited[x][y] = 1;
+//    int next_x = 0;
+//    int next_y = 0;
+//    for(auto temp : dir)
+//    {
+//        next_x = x + temp[0];
+//        next_y = y + temp[1];
+//        // 合理范围判断下一步元素
+//        if(next_x >= 0 && next_y >= 0 && next_x <= graph.size()-1 && next_y <= graph[0].size()-1)
+//        {
+//            // 能够继续向上移动
+//            if(graph[x][y] <= graph[next_x][next_y])
+//                dfs(graph, visited, next_x, next_y);
+//        }
+//    }
+//}
+//
+//
+//int main()
+//{
+//    // note 一开始想的方法复杂度太高, 需要从每一个点都出发遍历整个区域,故为 O(m^2 * n^2)
+//    int n = 0, m = 0;
+//    cin >> n >> m;
+//    vector<vector<int>> graph(n, vector<int>(m, 0));
+//    for(int i = 0; i < n; ++i)
+//    {
+//        for(int j = 0; j < m; ++j)
+//            cin >> graph[i][j];
+//    }
+//
+//    // 设定两种遍历的区域, 最终取其中的共享点
+//    vector<vector<int>> firstBoard(n, vector<int>(m,0));
+//    vector<vector<int>> secondBoard(n, vector<int>(m,0));
+//
+//    // 第一边界
+//    for(int i = 0; i <= m-1; ++i)
+//        dfs(graph, firstBoard, 0, i);
+//    for(int i = 0; i <= n-1; ++i)
+//        dfs(graph, firstBoard, i, 0);
+//
+//    // 第二边界
+//    for(int i = 0; i <= m - 1; ++i)
+//        dfs(graph, secondBoard, n-1, i);
+//    for(int i = 0; i <= n - 1; ++i)
+//        dfs(graph, secondBoard, i, m-1);
+//
+//
+//    for(int i = 0; i < n; ++i)
+//    {
+//        for(int j = 0; j < m; ++j)
+//        {
+//            if(firstBoard[i][j] && secondBoard[i][j])
+//                cout << i << ' ' << j << endl;
+//        }
+//    }
+//    return 0;
+//}
+
+
 /* 卡码网102 (沉没孤岛) 深度优先搜索(重新修正了之前的处理模式，将深度优先的逻辑进行修正) */
-#include <iostream>
-#include <vector>
-#include <deque>
-using namespace std;
-
-int flag = 0;
-// 保留一定结果，方便后续的处理
-deque<pair<int,int>> reindex = {};
-// 定义方向
-int dir[4][2] = {
-        {1,0},
-        {0,1},
-        {-1,0},
-        {0,-1}
-};
-
-
-// 指定出发点(x,y) 终点(end_x, end_y) 以及当前地图graph, 访问地图visited
-void dfs(vector<vector<int>>& graph, vector<vector<int>>& visited, int x, int y)
-{
-    if(visited[x][y] == 1) return;
-    else
-        visited[x][y] = 1;
-
-    int next_x = 0;
-    int next_y = 0;
-    if(graph[x][y] != 0)
-    {
-        // 处理当前节点，如果当前节点的位置在边缘区域直接清空该部分
-        if(x <= 1 || y <= 1 || x == graph.size() - 1 || y == graph[0].size() - 1)
-        {
-            flag = 0;
-            // 清除当前所有区域的信息
-            while(!reindex.empty())
-                reindex.pop_front();
-        }
-
-        if(flag == 1)
-            reindex.emplace_back(x,y);
-
-        for(auto temp : dir)
-        {
-            next_x = x + temp[0];
-            next_y = y + temp[1];
-            if(next_x >= 0 && next_x <= graph.size()-1 && next_y >= 0 && next_y <= graph[0].size()-1)
-                dfs(graph, visited, next_x, next_y);
-        }
-        // 一次回调函数对应的的reindex查找结束之后不能直接操作graph数据, 需要当前这次操作回到出发位置才能处理
-    }
-}
-
-
-int main()
-{
-    int n = 0, m = 0;
-    cin >> n >> m;
-    vector<vector<int>> graph(n + 1, vector<int>(m + 1, 0));
-    vector<vector<int>> visited(n + 1, vector<int>(m + 1, 0));
-    for(int i = 1; i <= n; ++i)
-    {
-        for(int j = 1; j <= m; ++j)
-            cin >> graph[i][j];
-    }
-
-    // 深度优先搜索
-    for(int i = 1; i <= n; ++i)
-    {
-        for(int j = 1; j <= m; ++j)
-        {
-            if(visited[i][j] == 0)
-            {
-                if(i <= 1 || j <= 1 || i == graph.size()-1 || j == graph[0].size() - 1)
-                    flag = 0;
-                else
-                    flag = 1;
-
-                if(graph[i][j] == 1)
-                {
-                    dfs(graph, visited, i, j);
-                    while(!reindex.empty())
-                    {
-                        auto temp = reindex.front();
-                        reindex.pop_front();
-                        graph[temp.first][temp.second] = 0;
-                    }
-                }
-                else
-                    visited[i][j] = 1;
-            }
-        }
-    }
-
-    for(int i = 1; i<=graph.size()-1; ++i)
-    {
-        for(int j = 1; j <= graph[0].size() - 2; ++j)
-            cout << graph[i][j] << ' ';
-        cout << graph[i][graph[0].size()-1] << endl;
-    }
-    return 0;
-}
+//#include <iostream>
+//#include <vector>
+//#include <deque>
+//using namespace std;
+//
+//int flag = 0;
+//// 保留一定结果，方便后续的处理
+//deque<pair<int,int>> reindex = {};
+//// 定义方向
+//int dir[4][2] = {
+//        {1,0},
+//        {0,1},
+//        {-1,0},
+//        {0,-1}
+//};
+//
+//
+//// 指定出发点(x,y) 终点(end_x, end_y) 以及当前地图graph, 访问地图visited
+//void dfs(vector<vector<int>>& graph, vector<vector<int>>& visited, int x, int y)
+//{
+//    if(visited[x][y] == 1) return;
+//    else
+//        visited[x][y] = 1;
+//
+//    int next_x = 0;
+//    int next_y = 0;
+//    if(graph[x][y] != 0)
+//    {
+//        // 处理当前节点，如果当前节点的位置在边缘区域直接清空该部分
+//        if(x <= 1 || y <= 1 || x == graph.size() - 1 || y == graph[0].size() - 1)
+//        {
+//            flag = 0;
+//            // 清除当前所有区域的信息
+//            while(!reindex.empty())
+//                reindex.pop_front();
+//        }
+//
+//        if(flag == 1)
+//            reindex.emplace_back(x,y);
+//
+//        for(auto temp : dir)
+//        {
+//            next_x = x + temp[0];
+//            next_y = y + temp[1];
+//            if(next_x >= 0 && next_x <= graph.size()-1 && next_y >= 0 && next_y <= graph[0].size()-1)
+//                dfs(graph, visited, next_x, next_y);
+//        }
+//        // 一次回调函数对应的的reindex查找结束之后不能直接操作graph数据, 需要当前这次操作回到出发位置才能处理
+//    }
+//}
+//
+//
+//int main()
+//{
+//    int n = 0, m = 0;
+//    cin >> n >> m;
+//    vector<vector<int>> graph(n + 1, vector<int>(m + 1, 0));
+//    vector<vector<int>> visited(n + 1, vector<int>(m + 1, 0));
+//    for(int i = 1; i <= n; ++i)
+//    {
+//        for(int j = 1; j <= m; ++j)
+//            cin >> graph[i][j];
+//    }
+//
+//    // 深度优先搜索
+//    for(int i = 1; i <= n; ++i)
+//    {
+//        for(int j = 1; j <= m; ++j)
+//        {
+//            if(visited[i][j] == 0)
+//            {
+//                if(i <= 1 || j <= 1 || i == graph.size()-1 || j == graph[0].size() - 1)
+//                    flag = 0;
+//                else
+//                    flag = 1;
+//
+//                if(graph[i][j] == 1)
+//                {
+//                    dfs(graph, visited, i, j);
+//                    while(!reindex.empty())
+//                    {
+//                        auto temp = reindex.front();
+//                        reindex.pop_front();
+//                        graph[temp.first][temp.second] = 0;
+//                    }
+//                }
+//                else
+//                    visited[i][j] = 1;
+//            }
+//        }
+//    }
+//
+//    for(int i = 1; i<=graph.size()-1; ++i)
+//    {
+//        for(int j = 1; j <= graph[0].size() - 2; ++j)
+//            cout << graph[i][j] << ' ';
+//        cout << graph[i][graph[0].size()-1] << endl;
+//    }
+//    return 0;
+//}
 
 
 /* 卡码网101 (孤岛的最大面积) 广度优先搜索 */
