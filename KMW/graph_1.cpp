@@ -1,5 +1,79 @@
 /*** 图论(主要整理代码随想录中的图论章节问题, 问题基本都是在卡码网上) ***/
 
+/* 卡码网105 岛屿的最大周长 */
+#include <iostream>
+#include <vector>
+using namespace std;
+
+
+int res = 0;
+int dir[4][2] = {
+        {1,0},
+        {0,1},
+        {-1,0},
+        {0,-1}
+};
+
+void dfs(vector<vector<int>>& graph, vector<vector<int>>& visited, int x, int y)
+{
+    if(visited[x][y] == 1)
+        return;
+    visited[x][y] = 1;
+    int next_x = 0;
+    int next_y = 0;
+
+    if(graph[x][y] == 1)
+    {
+        int count = 0;
+        for(auto temp : dir)
+        {
+            next_x = x + temp[0];
+            next_y = y + temp[1];
+            // 判断周长,不仅周围越界或者是0都要+1
+            if(next_x >= 0 && next_y >= 0 && next_x <= graph.size()-1 && next_y <= graph[0].size()-1)
+            {
+                if(graph[next_x][next_y] == 0)
+                    count++;
+                else
+                    dfs(graph, visited, next_x, next_y);
+            }
+            else
+                count++;
+        }
+        res += count;
+//        cout << "(" << x << " " << y << ")" << "cur count: " << count << endl;
+    }
+}
+
+int main()
+{
+    // 计算岛屿的周长需要提前判断周围是不是0,零的数量对应着其周长
+    int n = 0, m = 0;
+    cin >> n >> m;
+
+    vector<vector<int>> graph(n, vector<int>(m, 0));
+    vector<vector<int>> visited(n, vector<int>(m,0));
+    for(int i = 0; i < n; ++i)
+    {
+        for(int j = 0; j < m; ++j)
+            cin >> graph[i][j];
+    }
+
+    for(int i = 0; i < n; ++i)
+    {
+        for(int j = 0; j < m; ++j)
+        {
+            if(graph[i][j] == 1 && visited[i][j] == 0)
+            {
+                dfs(graph, visited, i, j);
+            }
+        }
+    }
+    cout << res;
+    return 0;
+}
+
+
 
 /* 卡码网104 建造最大岛屿 */
 // note 这里的整理过程主要有两步 (1)整理当前所有岛屿以及其对应的编号 (2)重新遍历0元素出来的位置然后寻找对应的区域 但是需要直到每一个(x,y)位置对应的岛屿编号 | 一开始的思路是保留原始的输入数据，所以需要重新新建一个m*n的二维结构来对应数据
