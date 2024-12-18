@@ -1,5 +1,5 @@
 /* 关于dijsktra处理 - 寻找最短路径 */
-// note dijsktra方法与prim找最小生成的树的方法有些类似但是又不完全相同
+// note dijsktra方法与prim找最小生成的树的方法有些类似但是又不完全相同 - dijsktra中的minDistance[]保存的是其余点到出发点的距离是累计的，但是对于prim中的minDistance[]方法保存的是点到最小生成树的距离
 
 #include <iostream>
 #include <vector>
