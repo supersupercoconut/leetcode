@@ -119,14 +119,121 @@
 //    return 0;
 //}
 
-/* 解决出现负权回路的方法 */
+/* Bellman_ford(遍历边版本) 解决出现负权回路的方法 */
+//#include <iostream>
+//#include <vector>
+//#include <climits>
+//using namespace std;
+//
+//int main()
+//{
+//
+//    int n, m;
+//    cin >> n >> m;
+//
+//    int a, b, c;
+//    vector<vector<int>> grid;
+//    while(m--)
+//    {
+//        cin >> a >> b >> c;
+//        // grid在这里只进行数据的保存
+//        grid.push_back({a,b,c});
+//    }
+//
+//    // 处理整体流程, 需要对所有的边都进行n次松弛 (无负权回路的方法只需要进行n-1次松弛)
+//    vector<int> minDistance(n+1, INT_MAX);
+//    int start = 1;
+//    int end = n;
+//    bool flag = false;
+//    minDistance[start] = 0;
+//    for(int i = 1; i <= n; ++i)
+//    {
+//        for(auto tmp : grid)
+//        {
+//            if(minDistance[tmp[0]] != INT_MAX)
+//            {
+//                // 修正距离矩阵
+//                if(i < n)
+//                    minDistance[tmp[1]] = minDistance[tmp[1]] > minDistance[tmp[0]] + tmp[2] ? minDistance[tmp[0]] + tmp[2] : minDistance[tmp[1]];
+//                // 第n次处理
+//                else
+//                {
+//                    // 使用相同的逻辑判断minDistance的数组元素是否会发生改变
+//                    if(minDistance[tmp[1]] > minDistance[tmp[0]] + tmp[2]) flag = true;
+//                }
+//
+//            }
+//        }
+//    }
+//    if(flag) cout << "circle";
+//    else if(minDistance[end] == INT_MAX) cout << "unconnected";
+//    else
+//        cout << minDistance[end];
+//    return 0;
+//}
+
+
+
+/* Bellman_ford(队列优化版本) 解决出现负权回路的方法
+ * 这部分处理队列比较复杂, 而且与之前没有出现负权回路的方法差别比较大
+ * */
+
+
+
+
+/* Bellman_ford 解决最短路径(加上了路径限制, 最多经过k个城市) */
+// note 最多经过k个城市,相当于是限制了边的数量,从而也就限制了每次松弛之后能被修改的节点 - 因此这里copy了上次计算得到的minDistance数组(之前问题都不需要考虑这方面)
 #include <iostream>
 #include <vector>
-
+#include <climits>
 using namespace std;
-
 int main()
 {
+    int n,m;
+    cin >> n >> m;
+    int a, b, c;
+    vector<vector<int>> grid;
+
+    while(m--)
+    {
+        cin >> a >> b >> c;
+        grid.push_back({a,b,c});
+    }
+
+    int start, end, k;
+    cin >> start >> end >> k;
+
+    // 每对所有的边松弛一次，即对应从start开始一条边的最短路径被查找到
+    vector<int> minDistance(n+1, INT_MAX);
+    vector<int> minDistance_copy;
+    minDistance[start] = 0;
+    for(int i = 1; i <= k+1; ++i)
+    {
+        // 每一次松弛都需要从上次松弛的minDistance[]数组开始
+        minDistance_copy = minDistance;
+        for(auto tmp : grid)
+        {
+            if(minDistance_copy[tmp[0]] != INT_MAX)
+                minDistance[tmp[1]] = minDistance[tmp[1]] > minDistance_copy[tmp[0]] + tmp[2] ? minDistance_copy[tmp[0]] + tmp[2] : minDistance[tmp[1]];
+        }
+        // 查找minDistance数组的变换情况
+//        for(auto j : minDistance)
+//            cout << j << " ";
+//        cout << endl;
+    }
+
+    // 输出
+    if(minDistance[end] != INT_MAX)
+        cout << minDistance[end];
+    else
+        cout << "unreachable";
 
     return 0;
 }
+
+
+
+
+
+
+
