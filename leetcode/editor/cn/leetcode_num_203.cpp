@@ -19,6 +19,7 @@ public:
     ListNode* removeElements(ListNode* head, int val)
     {
         // 利用虚拟头节点
+        if(head == nullptr) return nullptr;
         ListNode* myHead = new ListNode();
         ListNode* cur = head;
 
@@ -38,7 +39,10 @@ public:
             }
         }
 
-        return myHead->next;
+
+        head = myHead->next;
+        delete myHead;
+        return head;
 
     }
 };
