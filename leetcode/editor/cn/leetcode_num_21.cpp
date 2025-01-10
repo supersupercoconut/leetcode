@@ -40,14 +40,15 @@ public:
                 res = res->next;
             }
 
-            // 后续分析发现其中至少有一个指针不为空
-            ListNode* tmp = (left == nullptr) ? right : left;
-            while(tmp != nullptr)
-            {
-                res->next = tmp;
-                res = res->next;
-                tmp = tmp->next;
-            }
+            // 后续分析发现其中至少有一个指针不为空 —— 由于right与left仍然能保留其对应的后续数据，所以可以直接赋值即可 res->next = left中right不为空的元素
+            res->next = (left == nullptr) ? right : left;
+//            ListNode* tmp = (left == nullptr) ? right : left;
+//            while(tmp != nullptr)
+//            {
+//                res->next = tmp;
+//                res = res->next;
+//                tmp = tmp->next;
+//            }
             break;
         }
 
