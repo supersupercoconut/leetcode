@@ -10,9 +10,6 @@ public:
     {
         while(left < right)
         {
-//            char temp = s[right];
-//            s[right] = s[left];
-//            s[left] = temp;
             swap(s[left], s[right]);
             ++left;
             --right;
@@ -24,7 +21,6 @@ public:
         // 反转字符串中的每个单词
         int left = 0;
         while(s[left] == ' ') ++left;
-
         // 先使用双指针对中间空格进行去除(无法保留单词之间的一个空格)
         int slow = left;
         int fast = left;
@@ -36,29 +32,16 @@ public:
                 s[slow++] = s[fast];
         }
 
-        if(s[slow] == ' ')
-            s.substr(left,  slow-1);
+        // note 该问题最为复杂的部分就是如何判断什么时候s字符串的substr应该截取到哪里为止 这里极有可能出问题！！！
+        if(slow > 0 && s[slow - 1] == ' ') s = s.substr(left,  slow - left - 1);
         else
-            s.substr(left,  slow);
+          s = s.substr(left,  slow - left);
 
-//        while(fast < s.size())
-//        {
-//            if(s[fast] != ' ')
-//            {
-////                if(fast - slow == 1) ++slow;
-//                swap(s[slow], s[fast]);
-//                ++slow;
-//            }
-//                ++fast;
-//        }
-//        cout << "|" << s << "|" << endl;
-
-        int right = s.size()-1;
-        trans(s, left, right);
+        trans(s, 0, s.size()-1);
         // 剩余对单词之间进行单独转换
-        slow = left;
-        fast = left;
-        while(fast < right)
+        slow = 0;
+        fast = 0;
+        while(fast < s.size())
         {
             if(s[fast] == ' ')
             {
@@ -69,10 +52,7 @@ public:
             ++fast;
         }
         // 最后一个单词没有反转 - right这里对应的最后一个正常字符
-        trans(s, slow, fast);
-        // 取字符串即删除掉左右的多余空格
-//        auto res = s.substr(left, right - left + 1);
-//        cout << "|" << res << "|" << endl;
+        trans(s, slow, fast-1);
         return s;
     }
 };
