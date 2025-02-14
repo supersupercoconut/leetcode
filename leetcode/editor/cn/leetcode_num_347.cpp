@@ -55,6 +55,43 @@ public:
 
 }
 
+// note 在这里实现了一种大顶堆的方法 - 使用大顶堆与小顶堆之间的区别就是小顶堆只需要保证当前堆中的元素是k即可, 但是对于大顶堆而言，所有的元素都需要进入大顶堆中，其对应的弹出以及放入元素的耗时会更高一些
+//class myComparison {
+//    // 构建大顶堆
+//public:
+//    bool operator() (const pair<int, int>& a, const pair<int, int>& b) {
+//        return a.second < b.second;
+//    }
+//};
+//
+//
+//int main() {
+//    // 前k个高频元素
+//    vector<int> v = {1,1,1,2,2,3};
+//    int k = 2;
+//    unordered_map<int,int> map;
+//    for (int i = 0; i < v.size(); i++) {
+//        map[v[i]] ++;
+//    }
+//
+//    priority_queue<pair<int,int>, vector<pair<int,int>>, myComparison> pq;
+//    for (auto i : map) {
+//        pq.push(make_pair(i.first,i.second));
+//    }
+//
+//    vector<int> res;
+//    while (k--) {
+//        res.push_back(pq.top().first);
+//        pq.pop();
+//    }
+//
+//    for (auto i : res) {
+//        cout << i << " ";
+//    }
+//
+//    return 0;
+//}
+
 using namespace solution347;
 int main() {
     Solution solution = Solution();
