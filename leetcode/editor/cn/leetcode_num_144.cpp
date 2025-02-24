@@ -46,6 +46,23 @@ void stack_traversal(TreeNode* root, vector<int>& res)
     }
 }
 
+// 2-24补充
+void myTravsel(TreeNode* node, vector<int>& res)
+{
+    if(node == nullptr) return;
+    stack<TreeNode*> st;
+    st.push(node);
+    while(!st.empty())
+    {
+        auto temp = st.top();
+        st.pop();
+        res.push_back(temp->val);
+        if(temp->right != nullptr) st.push(temp->right);
+        if(temp->left != nullptr) st.push(temp->left);
+    }
+}
+
+
 
 class Solution {
 public:
@@ -58,9 +75,8 @@ public:
 
         /*** 迭代方法 ***/
         vector<int> res={};
-        stack_traversal(root, res);
+        myTravsel(root, res);
         return res;
-
     }
 };
 //leetcode submit region end(Prohibit modification and deletion)
