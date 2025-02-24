@@ -57,6 +57,29 @@ void stack_traversal(TreeNode* root , vector<int>& res )
  * 2. 在访问中间结点的时候，加入了NULL. 针对stack中的元素是否为NULL分策略进行读取(就是不知道这种策略是不是在其他情况也能使用)
  * */
 
+// 包含了对于一些节点重入栈与出栈，保证整体的流程还是左中右
+void myTravseral(TreeNode* root, vector<int>& res)
+{
+    if(root == nullptr) return;
+    stack<TreeNode*> st;
+    unordered_set<TreeNode*> used;
+    st.push(root);
+    while(!st.empty())
+    {
+        auto temp = st.top();
+        st.pop();
+        if(used.find(temp) == used.end()) used.insert(temp);
+        else
+        {
+            res.push_back(temp->val);
+            continue;
+        }
+        if(temp->right != nullptr) st.push(temp->right);
+        st.push(temp);
+        if(temp->left != nullptr) st.push(temp->left);
+    }
+}
+
 
 class Solution {
 public:
@@ -64,7 +87,8 @@ public:
     {
         vector<int> res;
         // traversal(root,res);
-        stack_traversal(root,res);
+//        stack_traversal(root,res);
+        myTravseral(root, res);
         return res;
     }
 };
