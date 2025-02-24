@@ -44,6 +44,33 @@ void stack_traversal(TreeNode* root , vector<int>& res)
     reverse(res.begin(), res.end());
 }
 
+void myTraversal(TreeNode* root, vector<int>& res)
+{
+    if(root == nullptr) return;
+    stack<TreeNode*> s;
+    unordered_set<TreeNode*> used;
+    s.push(root);
+    while(!s.empty())
+    {
+        auto tmp = s.top();
+        s.pop();
+
+        if(used.find(tmp) == used.end()) used.insert(tmp);
+        else
+        {
+            res.push_back(tmp->val);
+            continue;
+        }
+
+        s.push(tmp);
+        if(tmp->right) s.push(tmp->right);
+        if(tmp->left) s.push(tmp->left);
+
+    }
+}
+
+
+
 class Solution {
 public:
     // 后序遍历，按照左右中的顺序遍历
@@ -56,7 +83,8 @@ public:
 
         /*** 迭代遍历 ***/
         vector<int> res = {};
-        stack_traversal(root, res);
+//        stack_traversal(root, res);
+        myTraversal(root, res);
         return res;
     }
 };
