@@ -20,6 +20,7 @@ namespace solution404{
 // 改变之前的逻辑, 提前一个节点判断其是不是左叶子节点
 int traversal(TreeNode* treeNode)
 {
+    // 这里直接提前去判断是不是左节点，并且只有左节点的部分的值才会被加入到计算 | 剩余过程与直接遍历整个二叉树的思路是类似的
     int res = 0;
     if(treeNode->left != nullptr && treeNode->left->left == nullptr && treeNode->left->right == nullptr)
         res += treeNode->left->val;
