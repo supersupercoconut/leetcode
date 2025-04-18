@@ -82,6 +82,57 @@ public:
             return root;
         }
     }
+
+
+    // note 这次的思路是自己想出来的比较复杂的解决方法 之前的方法是将整体更换成了两次递归遍历进行搜索
+//    TreeNode* traversal(TreeNode* node, int key)
+//    {
+//        if(node == nullptr) return node;
+//        if(node->val > key)
+//        {
+//            node->left = traversal(node->left, key);
+//            return node;
+//        }
+//
+//        else if(node->val < key)
+//        {
+//            node->right = traversal(node->right, key);
+//            return node;
+//        }
+//
+//        else
+//        {
+//            if(node->right == nullptr) return node->left;
+//            if(node->left == nullptr) return node->right;
+//
+//            auto tmp = node->right->left;
+//            while(tmp != nullptr && tmp->left != nullptr)
+//                tmp = tmp->left;
+//            if(tmp == nullptr) node->right->left = node->left;
+//            else
+//                tmp->left = node->left;
+//
+//            return node->right;
+//        }
+//
+//    }
+//
+//    TreeNode* deleteNode(TreeNode* root, int key)
+//    {
+//        return traversal(root, key);
+//    }
+
+
+
+
+
+
+
+
+
+
+
+
 };
 //leetcode submit region end(Prohibit modification and deletion)
 

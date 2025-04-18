@@ -77,25 +77,114 @@ Node* sortList(Node* head) {
     return merge(left, right);
 }
 
+//int partition(vector<int>& nums, int left, int right)
+//{
+//    int i = left;
+//    int j = right;
+//    while(i < j)
+//    {
+//        if(nums[i] )
+//
+//
+//    }
+//}
+
+
+//void quickSort(vector<int>& nums, int left, int right)
+//{
+//    if(left >= right) return;
+//
+//    int i = left;
+//    int j = right;
+//    while(i < j)
+//    {
+//        while(nums[i] < nums[left] && i < j) {
+//            ++i;
+//        }
+//
+//        while(nums[j] > nums[left] && i < j) {
+//            --j;
+//        }
+//        swap(nums[i], nums[j]);
+//    }
+//    swap(nums[left], nums[i]);
+//
+//
+//    for(auto a : nums)
+//        cout << a << " ";
+//    cout << endl;
+//
+//
+//    // i位置为中间位置
+//    quickSort(nums, left, i-1);
+//    quickSort(nums,i+1, right);
+//}
+
+// index为当前需要被插入的元素 从0~index为需要被插入元素的部分 | 关于插入排序实际上是可以存在更简单的表示方法, 但对应的时间复杂度还是O(n^2)
+void insertSort(vector<int>& nums, int index) {
+    if (index >= nums.size() || index < 1) return;
+    int i = 0;
+
+    while (i < index && nums[i] <= nums[index])
+        ++i;
+
+
+    int j = index - 1;
+//    if(j >= i)
+//    {
+        int tmp = nums[index];
+        while(j >= i)
+        {
+            nums[j+1] = nums[j];
+            --j;
+        }
+        nums[i] = tmp;
+//    }
+
+
+    for(auto a : nums)
+    {
+        cout << a << " ";
+    }
+    cout << endl;
+
+    insertSort(nums, index + 1);
+}
+
+
+
 int main()
 {
-    vector<int> v = {19, 2, 15, 4, 9, 10};
-    // 正确构建链表（保持原顺序）
-    Node dummy(0, nullptr);
-    Node* ptr = &dummy;
-    for (int num : v) {
-        ptr->m_next = new Node(num, nullptr);
-        ptr = ptr->m_next;
+    vector<int> v = {1,5,12,3,19,2,15,4,9,10};
+    /* 归并排序 */
+//    Node dummy(0, nullptr);
+//    Node* ptr = &dummy;
+//    for (int num : v) {
+//        ptr->m_next = new Node(num, nullptr);
+//        ptr = ptr->m_next;
+//    }
+//
+//    // 排序并输出
+//    Node* sorted = sortList(dummy.m_next);
+//    while (sorted) {
+//        cout << sorted->m_val << " ";
+//        Node* temp = sorted;
+//        sorted = sorted->m_next;
+//        delete temp; // 及时释放内存
+//    }
+
+    /* 快速排序 - 仿照sort()实现的排序 */
+//    quickSort(v, 0, v.size()-1);
+
+    insertSort(v, 1);
+
+
+    for(auto i : v)
+    {
+        cout << i << " ";
     }
 
-    // 排序并输出
-    Node* sorted = sortList(dummy.m_next);
-    while (sorted) {
-        cout << sorted->m_val << " ";
-        Node* temp = sorted;
-        sorted = sorted->m_next;
-        delete temp; // 及时释放内存
-    }
 
+    system("pause");
     return 0;
 }
