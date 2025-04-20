@@ -21,3 +21,11 @@ add_executable(Train
 add_executable(KMW
 #        KMW/KMW_99.cpp)
         KMW/KMW_126.cpp)
+
+add_executable(threadPool
+        ThreadPool/ThreadPool.cpp)
+
+find_package(Threads REQUIRED)
+target_link_libraries(threadPool PRIVATE Threads::Threads)
+
+#        KMW/KMW_126.cpp)

@@ -77,7 +77,6 @@ auto ThreadPool::enqueue(F&& f, Args&&... args)
             std::bind(std::forward<F>(f), std::forward<Args>(args)...)
     );
 
-    // res可以在后续使用res.get()来获取到这个线程最后的执行结果
     std::future<return_type> res = task->get_future();
     {
         std::unique_lock<std::mutex> lock(queue_mutex);
